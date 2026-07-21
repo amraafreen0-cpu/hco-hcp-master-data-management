@@ -1,0 +1,221 @@
+# Healthcare Master Data Management (MDM) Pipeline
+
+## Overview
+
+This project demonstrates the implementation of a Healthcare Master Data Management (MDM) framework for managing Healthcare Organization (HCO) and Healthcare Professional (HCP) data using Databricks, PySpark, and SQL.
+
+The solution follows the Medallion Architecture pattern and processes data through Bronze, Silver, and Gold layers to produce trusted master datasets.
+
+---
+
+## Business Problem
+
+Healthcare provider information often exists across multiple systems and sources with inconsistent naming conventions, incomplete attributes, duplicate records, and differing business standards.
+
+Without a centralized MDM process, organizations face challenges such as:
+
+- Duplicate provider records
+- Inconsistent reporting
+- Poor data quality
+- Operational inefficiencies
+- Limited visibility across systems
+
+The objective of this project is to establish a trusted provider master by standardizing and validating provider data before publishing it for enterprise use.
+
+---
+
+## Medallion Architecture
+
+### Bronze Layer
+
+Location:
+
+```text
+01_Staging
+```
+
+Responsibilities:
+
+- Source ingestion
+- Raw data storage
+- Initial validation
+- Incremental loading
+
+Objects:
+
+- STG_HCO
+- STG_HCP
+- STG_ADDR
+- STG_ID
+
+---
+
+### Silver Layer
+
+Location:
+
+```text
+02_PreMDM
+```
+
+Responsibilities:
+
+- Attribute standardization
+- Business rule execution
+- Data quality checks
+- Address validation
+- Data enrichment
+- Identifier generation
+
+Objects:
+
+- PREMDM_HCO
+- PREMDM_HCP
+- PREMDM_ADDR
+- PREMDM_ID
+
+---
+
+### Gold Layer
+
+Location:
+
+```text
+03_Publish
+```
+
+Responsibilities:
+
+- Publishing master records
+- Cross-reference generation
+- Creation of reporting-ready datasets
+
+Objects:
+
+- PUB_HCO
+- PUB_HCP
+- PUB_ID
+- HCO_XREF
+- HCP_XREF
+
+---
+
+## Data Profiling Layer
+
+Location:
+
+```text
+00_Profiling
+```
+
+Profiling activities include:
+
+- Null analysis
+- Duplicate detection
+- Attribute completeness analysis
+- Data quality assessment
+- Distribution analysis
+
+This phase helps identify source system quality issues before ingestion.
+
+---
+
+## Testing Layer
+
+Location:
+
+```text
+04_Testing
+```
+
+Validation activities include:
+
+- Record count verification
+- Business rule validation
+- Reconciliation testing
+- Data quality verification
+- Publishing validation
+
+---
+
+## Databricks Workflow Orchestration
+
+Databricks Workflows are used to automate pipeline execution.
+
+Execution Flow:
+
+```text
+STG_ADDR
+STG_HCO
+STG_HCP
+STG_ID
+      ↓
+ID_GEN
+      ↓
+PREMDM_ADDR
+PREMDM_HCO
+PREMDM_HCP
+PREMDM_ID
+      ↓
+PUB_HCP_XREF
+PUB_HCO_XREF
+      ↓
+PUB_HCO
+PUB_HCP
+PUB_ID
+```
+
+This orchestration ensures proper dependency management and scalable processing.
+
+---
+
+## Technology Stack
+
+### Data Engineering
+
+- PySpark
+- SQL
+
+### Platform
+
+- Databricks
+- Azure
+
+### Architecture Pattern
+
+- Medallion Architecture
+- Master Data Management (MDM)
+
+### Storage
+
+- Delta Lake
+
+---
+
+## Project Outcome
+
+The solution produces trusted master datasets for Healthcare Organizations and Healthcare Professionals by:
+
+- Standardizing source data
+- Applying business validation rules
+- Improving data quality
+- Generating enterprise identifiers
+- Creating master publishing tables
+- Supporting downstream analytics and reporting
+
+---
+
+## Future Enhancements
+
+- Fuzzy Matching Engine
+- Survivorship Rules Framework
+- Golden Record Creation
+- Stewardship Workflow
+- Data Quality Dashboard
+- Automated Monitoring & Alerting
+
+---
+
+## Disclaimer
+
+The project is intended for educational and portfolio purposes and uses sample/demo healthcare data. No confidential business information or patient data has been included.
